@@ -32,6 +32,7 @@ type Matf struct {
 // Dim contains the dimensions of a MatMatrix
 type Dim struct {
 	X, Y, Z int
+	Extra   []int
 }
 
 // NumPrt contains the numeric part of a matrix
@@ -111,7 +112,7 @@ func readDimensions(data interface{}) (Dim, error) {
 		case 2:
 			dim.Z = int(value)
 		default:
-			return Dim{}, fmt.Errorf("More dimensions than exptected")
+			dim.Extra = append(dim.Extra, int(value))
 		}
 	}
 	return dim, nil
@@ -393,8 +394,8 @@ func readDataElementField(m *Matf, order binary.ByteOrder) (MatMatrix, error) {
 }
 
 // Dimensions returns the dimensions of a matrix
-func (m MatMatrix) Dimensions() (int, int, int, error) {
-	return m.Dim.X, m.Dim.Y, m.Dim.Z, nil
+func (m MatMatrix) Dimensions() (int, int, int, []int, error) {
+	return m.Dim.X, m.Dim.Y, m.Dim.Z, m.Dim.Extra, nil
 }
 
 // Open a MAT-file and extracts the header information into the Header struct.

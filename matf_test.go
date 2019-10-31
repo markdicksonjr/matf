@@ -210,7 +210,7 @@ func TestDimensions(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			x, y, z, err := tc.mat.Dimensions()
+			x, y, z, extra, err := tc.mat.Dimensions()
 			if err != nil {
 				if matched, _ := regexp.MatchString(tc.err, err.Error()); !matched {
 					t.Fatalf("Error matching regex: %v \t Got: %v", tc.err, err)
@@ -227,6 +227,8 @@ func TestDimensions(t *testing.T) {
 				t.Fatalf("Expected y: %d\tgot: %d", tc.y, y)
 			} else if tc.z != z {
 				t.Fatalf("Expected z: %d\tgot: %d", tc.x, z)
+			} else if extra != nil {
+				t.Fatalf("Expected no extra dimensions, got: %d", len(extra))
 			}
 		})
 	}
